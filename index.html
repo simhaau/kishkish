@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קיש קיש קריא — הורדת התוכנה</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;300;400;500;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --accent-glow: rgba(34, 211, 238, 0.3);
+            --bg: #0a0a0f;
+            --bg-elevated: #12121a;
+            --bg-card: #1a1a25;
+            --bg-card-hover: #222230;
+            --border: rgba(255,255,255,0.06);
+            --border-hover: rgba(255,255,255,0.12);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --glass: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Heebo', 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* === AMBIENT BACKGROUND === */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .ambient-bg::before {
+            content: '';
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            top: -200px;
+            right: -200px;
+            background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+            animation: float1 20s ease-in-out infinite;
+        }
+        .ambient-bg::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            bottom: -100px;
+            left: -100px;
+            background: radial-gradient(circle, rgba(34,211,238,0.1) 0%, transparent 70%);
+            animation: float2 25s ease-in-out infinite;
+        }
+        @keyframes float1 {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(-50px, 30px) scale(1.1); }
+        }
+        @keyframes float2 {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(40px, -20px) scale(1.05); }
+        }
+
+        /* === NOISE TEXTURE === */
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* === GRID PATTERN === */
+        .grid-pattern {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: 
+                linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+        }
+
+        /* === CONTAINER === */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* === HEADER === */
+        header {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+            margin-bottom: 28px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .brand-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-light) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 12px;
+            font-weight: 300;
+        }
+
+        .platform-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: rgba(34,211,238,0.08);
+            border: 1px solid rgba(34,211,238,0.15);
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 500;
+        }
+        .platform-tag svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* === HERO VERSION CARD === */
+        .hero-version {
+            margin: 48px 0 60px;
+            position: relative;
+        }
+
+        .hero-card {
+            background: linear-gradient(145deg, var(--bg-card) 0%, rgba(99,102,241,0.08) 100%);
+            border: 1px solid var(--border-hover);
+            border-radius: 24px;
+            padding: 48px 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-light), var(--accent), transparent);
+        }
+        .hero-card:hover {
+            border-color: rgba(99,102,241,0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 40px 80px -20px rgba(99,102,241,0.15), 0 0 0 1px rgba(99,102,241,0.1);
+        }
+
+        .latest-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: linear-gradient(135deg, var(--success), #16a34a);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .latest-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .hero-version-number {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-version-number span {
+            color: var(--primary-light);
+        }
+
+        .hero-date {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .hero-notes {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 32px;
+            padding-right: 12px;
+            border-right: 2px solid var(--primary);
+        }
+        .hero-notes ul {
+            list-style: none;
+            padding: 0;
+        }
+        .hero-notes li {
+            position: relative;
+            padding-right: 20px;
+            margin-bottom: 8px;
+        }
+        .hero-notes li::before {
+            content: '→';
+            position: absolute;
+            right: 0;
+            color: var(--primary-light);
+            font-weight: 700;
+        }
+
+        .hero-download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-family: inherit;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px -10px rgba(99,102,241,0.5);
+        }
+        .hero-download-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        .hero-download-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 20px 50px -10px rgba(99,102,241,0.6);
+        }
+        .hero-download-btn:hover::before {
+            transform: translateX(100%);
+        }
+        .hero-download-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+        .hero-download-btn svg {
+            width: 22px;
+            height: 22px;
+            transition: transform 0.3s;
+        }
+        .hero-download-btn:hover svg {
+            transform: translateY(2px);
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .hero-meta-item svg {
+            width: 16px;
+            height: 16px;
+            color: var(--primary-light);
+        }
+
+        /* === SECTION HEADER === */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-top: 20px;
+        }
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--border-hover), transparent);
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* === VERSIONS LIST === */
+        .versions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 60px;
+        }
+
+        .version-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 28px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .version-item::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .version-item:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            transform: translateX(-4px);
+        }
+        .version-item:hover::before {
+            opacity: 1;
+        }
+
+        .version-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(34,211,238,0.1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .version-icon svg {
+            width: 22px;
+            height: 22px;
+            color: var(--primary-light);
+        }
+
+        .version-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .version-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+        .version-date {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .version-notes-preview {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .version-download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border-hover);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .version-download-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        .version-download-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* === EMPTY STATE === */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(34,211,238,0.05));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .empty-icon svg {
+            width: 36px;
+            height: 36px;
+            color: var(--text-muted);
+        }
+        .empty-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .empty-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* === FOOTER === */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 48px 0 60px;
+            margin-top: 40px;
+        }
+
+        .footer-brand {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .footer-brand-name {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+        .footer-brand-tagline {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+        .footer-col-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+        .footer-col-item {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            transition: color 0.2s;
+        }
+        .footer-col-item:hover {
+            color: var(--text-primary);
+        }
+        .footer-phone {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(34,211,238,0.05));
+            border: 1px solid var(--border-hover);
+            border-radius: 12px;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+            direction: ltr;
+        }
+        .footer-phone:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .footer-phone svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+        }
+        .footer-copyright {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .footer-legal {
+            font-size: 12px;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        /* === LOADING === */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in {
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 640px) {
+            header { padding: 40px 0 30px; }
+            .hero-card { padding: 32px 24px; }
+            .hero-meta { gap: 16px; }
+            .version-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .version-download-btn { width: 100%; justify-content: center; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+        }
+
+        /* === SCROLLBAR === */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div class="noise"></div>
+    <div class="grid-pattern"></div>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header class="animate-in">
+            <div class="brand-badge">SA מערכות — בניית אתרים, תוכנות, אפליקציות ודפי נחיתה</div>
+            <h1>קיש קיש קריא</h1>
+            <p class="subtitle">יצירת סטי שירים מקצועיים עם מעברים חלקים וייצוא MP3 — בחינם לחלוטין</p>
+            <div class="platform-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                תוכנה ל-Windows בלבד
+            </div>
+        </header>
+
+        <!-- HERO VERSION -->
+        <div id="hero-version" class="animate-in delay-1">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">טוען גרסאות...</div>
+            </div>
+        </div>
+
+        <!-- PREVIOUS VERSIONS -->
+        <div id="previous-versions" class="animate-in delay-2">
+            <div class="section-header">
+                <div class="section-line"></div>
+                <span class="section-title">גרסאות קודמות</span>
+                <div class="section-line"></div>
+            </div>
+            <div class="versions-list" id="versions-list">
+                <!-- Versions loaded dynamically -->
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="animate-in delay-3">
+            <div class="footer-brand">
+                <div class="footer-brand-name">SA מערכות</div>
+                <div class="footer-brand-tagline">בניית אתרים · תוכנות · אפליקציות · דפי נחיתה · עוד</div>
+            </div>
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-col-title">שירותים</div>
+                    <div class="footer-col-item">פיתוח אתרים מותאם אישית</div>
+                    <div class="footer-col-item">אפליקציות מובייל iOS & Android</div>
+                    <div class="footer-col-item">תוכנות דסקטופ ל-Windows</div>
+                    <div class="footer-col-item">דפי נחיתה עם המרות גבוהות</div>
+                </div>
+                <div>
+                    <div class="footer-col-title">צור קשר</div>
+                    <div class="footer-col-item">
+                        <a href="tel:0533150511" class="footer-phone">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            053-315-0511
+                        </a>
+                    </div>
+                    <div class="footer-col-item">להזמנות — חייגו עכשיו</div>
+                    <div class="footer-col-item">זמינים לכל פרויקט דיגיטלי</div>
+                </div>
+                <div>
+                    <div class="footer-col-title">אודות</div>
+                    <div class="footer-col-item">קיש קיש קריא פותחה על ידי SA מערכות</div>
+                    <div class="footer-col-item">תוכנה חינמית לקהילת היוצרים</div>
+                    <div class="footer-col-item">עודכנה לאחרונה: יוני 2026</div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copyright">© 2026 SA מערכות. כל הזכויות שמורות.</div>
+                <div class="footer-legal">קיש קיש קריא הינה תוכנה חינמית המסופקת כפי שהיא (AS IS). SA מערכות אינה אחראית לנזקים ישירים או עקיפים הנובעים משימוש בתוכנה. זכויות היוצרים והקניין הרוחני שייכים ל-SA מערכות. אין להעתיק, לשכפל, לשדר, להפיץ או לשנות את התוכנה או חלקים ממנה ללא אישור מפורש בכתב. Windows® הוא סימן מסחרי רשום של Microsoft Corporation.</div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Load versions from JSON
+        async function loadVersions() {
+            const heroContainer = document.getElementById('hero-version');
+            const listContainer = document.getElementById('versions-list');
+
+            try {
+                const response = await fetch('versions.json');
+                if (!response.ok) throw new Error('Failed to load');
+                const data = await response.json();
+                const versions = data.versions || [];
+
+                if (versions.length === 0) {
+                    heroContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            </div>
+                            <div class="empty-title">עדיין אין גרסאות</div>
+                            <div class="empty-desc">הגרסה הראשונה של קיש קיש קריא תהיה זמינה בקרוב. הישארו מעודכנים!</div>
+                        </div>
+                    `;
+                    listContainer.innerHTML = '';
+                    return;
+                }
+
+                // Sort by date descending
+                versions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                const latest = versions[0];
+                const previous = versions.slice(1);
+
+                // Render hero (latest version)
+                const notesList = latest.notes ? latest.notes.map(n => `<li>${escapeHtml(n)}</li>`).join('') : '';
+                const notesHtml = notesList ? `<div class="hero-notes"><ul>${notesList}</ul></div>` : '';
+
+                heroContainer.innerHTML = `
+                    <div class="hero-version">
+                        <div class="hero-card">
+                            <div class="latest-badge">הגרסה העדכנית ביותר</div>
+                            <div class="hero-version-number">גרסה <span>${escapeHtml(latest.version)}</span></div>
+                            <div class="hero-date">${formatDate(latest.date)}</div>
+                            ${notesHtml}
+                            <a href="${escapeHtml(latest.downloadUrl)}" class="hero-download-btn" download>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                להורדת התוכנה
+                            </a>
+                            <div class="hero-meta">
+                                <div class="hero-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                    קובץ התקנה EXE
+                                </div>
+                                <div class="hero-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                    Windows 10/11
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Render previous versions
+                if (previous.length > 0) {
+                    listContainer.innerHTML = previous.map((v, i) => {
+                        const preview = v.notes && v.notes.length > 0 ? v.notes[0] : 'ללא הערות';
+                        return `
+                            <div class="version-item" style="animation: fadeInUp 0.5s ${i * 0.08}s cubic-bezier(0.4,0,0.2,1) forwards; opacity: 0;">
+                                <div class="version-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                </div>
+                                <div class="version-info">
+                                    <div class="version-number">גרסה ${escapeHtml(v.version)}</div>
+                                    <div class="version-date">${formatDate(v.date)}</div>
+                                    <div class="version-notes-preview">${escapeHtml(preview)}</div>
+                                </div>
+                                <a href="${escapeHtml(v.downloadUrl)}" class="version-download-btn" download>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                    הורדה
+                                </a>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    listContainer.innerHTML = '';
+                }
+
+            } catch (err) {
+                heroContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        </div>
+                        <div class="empty-title">עדיין אין גרסאות</div>
+                        <div class="empty-desc">הגרסה הראשונה של קיש קיש קריא תהיה זמינה בקרוב. הישארו מעודכנים!</div>
+                    </div>
+                `;
+                listContainer.innerHTML = '';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateStr) {
+            try {
+                const d = new Date(dateStr);
+                return d.toLocaleDateString('he-IL', { year: 'numeric', month: 'long', day: 'numeric' });
+            } catch {
+                return dateStr;
+            }
+        }
+
+        loadVersions();
+    </script>
+<input type='hidden' name='ntsp_block_page' value='https://safepage.etrog.net.il/?a=block/block1&level=5&url=http%3A%2F%2Fprod-chat-kimi.tos-cn-beijing.volces.com%2Fkimi-fs%2Fokc%2Fmfpcixhpehlpe%2Foutput%2Fsa-set-builder-download%2Findex.html%3FX-Tos-Algorithm%3DTOS4-HMAC-SHA256%26X-Tos-Credential%3DAKLTYTJlNjgwMjY2ZDBkNDFiYmI5YWNiZDBlZmFmYjIzZTA%252F20260625%252Fcn-beijing%252Ftos%252Frequest%26X-Tos-Date%3D20260625T115118Z%26X-Tos-Expires%3D518400%26X-Tos-Signature%3Ddd7662e5c574f445ccaef6f77d60ea5&user_id=650201&sigid=5e39e5fdce2008bc04ab246eea8ded7b98de358961f82eac79b9499bbd66b8a6&startm=202307&keyword=&referer=https%3A%2F%2Fwww.kimi.com%2Fchat%2F19efe8cc-1572-8811-8000-09e62ae0f5fd%3Fchat_enter_method%3Dhome&category=77&cause=Quiltingjs'/><input type='hidden' name='nts_id' value='650201'/><input type='hidden' name='sigid' value='6db4b0e9313317ee91b11af8dd54ca37'/><script src='/jsQuilting/server/etAddOn.js?v=1&k=23898278c1850f536d688db3614128a0' type='text/javascript' defer></script></body>
+</html>
