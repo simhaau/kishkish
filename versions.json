@@ -1,0 +1,35 @@
+{
+  "versions": [
+    {
+      "version": "1.2.0",
+      "date": "2026-06-20",
+      "downloadUrl": "https://example.com/sa-set-builder-v1.2.0.exe",
+      "notes": [
+        "שדרוג מערכת המעברים החלקים בין שירים",
+        "תמיכה בייצוא MP3 באיכות 320kbps",
+        "ממשק משתמש מחודש עם עיצוב כהה",
+        "תיקון באגים בטעינת קבצי אודיו גדולים"
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "date": "2026-05-15",
+      "downloadUrl": "https://example.com/sa-set-builder-v1.1.0.exe",
+      "notes": [
+        "הוספת אפשרות גרירה ושחרור (Drag & Drop) למיון שירים",
+        "שיפור ביצועים בטעינת ספריית מוזיקה",
+        "תמיכה בפורמטים נוספים: WAV, FLAC"
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "date": "2026-04-01",
+      "downloadUrl": "https://example.com/sa-set-builder-v1.0.0.exe",
+      "notes": [
+        "גרסה ראשונית — שחרור רשמי של SA Set Builder",
+        "יצירת סטי שירים עם מעברים חלקים",
+        "ייצוא MP3 בסיסי"
+      ]
+    }
+  ]
+}
