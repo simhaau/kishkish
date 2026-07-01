@@ -11,7 +11,7 @@
 
   gtag('config', 'G-SY2LV2K5VR');
 </script>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>קיש קיש קריא — הורדת התוכנה</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -661,7 +661,280 @@
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* ======================== */
+        /* === SECURITY MODAL === */
+        /* ======================== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-card {
+            background: linear-gradient(145deg, var(--bg-card) 0%, rgba(99,102,241,0.05) 100%);
+            border: 1px solid var(--border-hover);
+            border-radius: 28px;
+            padding: 0;
+            max-width: 520px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+        }
+        .modal-overlay.active .modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--warning), var(--accent), transparent);
+        }
+
+        .modal-header {
+            padding: 32px 32px 0;
+            text-align: center;
+        }
+
+        .modal-shield {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04));
+            border: 1px solid rgba(245,158,11,0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .modal-shield svg {
+            width: 32px;
+            height: 32px;
+            color: var(--warning);
+        }
+        .modal-shield::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 24px;
+            border: 1px solid rgba(245,158,11,0.1);
+            animation: shieldPulse 2s ease-in-out infinite;
+        }
+        @keyframes shieldPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.06); opacity: 0.5; }
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .modal-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .modal-body {
+            padding: 24px 32px;
+        }
+
+        .modal-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .modal-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 14px;
+            padding: 16px 18px;
+            transition: all 0.2s;
+        }
+        .modal-step:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .step-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .step-highlight {
+            color: var(--warning);
+            font-weight: 700;
+        }
+        .step-highlight-green {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .modal-footer {
+            padding: 0 32px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px -8px rgba(99,102,241,0.5);
+        }
+        .modal-btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px -8px rgba(99,102,241,0.6);
+        }
+        .modal-btn-primary:hover::before {
+            transform: translateX(100%);
+        }
+        .modal-btn-primary:active {
+            transform: translateY(0) scale(0.98);
+        }
+        .modal-btn-primary svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .modal-btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px 24px;
+            background: transparent;
+            border: 1px solid var(--border-hover);
+            border-radius: 14px;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .modal-btn-secondary:hover {
+            background: rgba(255,255,255,0.03);
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        .modal-trust {
+            text-align: center;
+            padding: 12px 32px 0;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        .modal-trust svg {
+            width: 14px;
+            height: 14px;
+            vertical-align: middle;
+            margin-left: 4px;
+            color: var(--success);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .modal-close:hover {
+            background: rgba(255,255,255,0.08);
+            color: var(--text-primary);
+        }
+        .modal-close svg {
+            width: 18px;
+            height: 18px;
+        }
     </style>
+<base target="_blank">
 </head>
 <body>
     <div class="ambient-bg"></div>
@@ -739,7 +1012,95 @@
         </footer>
     </div>
 
+    <!-- SECURITY MODAL -->
+    <div class="modal-overlay" id="securityModal">
+        <div class="modal-card">
+            <button class="modal-close" id="modalClose" aria-label="סגור">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="modal-header">
+                <div class="modal-shield">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                </div>
+                <div class="modal-title">התקנה מאובטחת</div>
+                <div class="modal-subtitle">Windows Defender עשוי להציג אזהרה — זה תקין לגמרי. הנה מה לעשות:</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-steps">
+                    <div class="modal-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">הורדת הקובץ</div>
+                            <div class="step-desc">לחצו על "הורד עכשיו" — הקובץ יישמר בתיקיית ההורדות שלכם.</div>
+                        </div>
+                    </div>
+                    <div class="modal-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">פתיחת הקובץ</div>
+                            <div class="step-desc">לחצו פעמיים על קובץ ההתקנה. יופיע מסך כחול של Windows Defender עם כותרת <span class="step-highlight">"Windows הגן על המחשב שלך"</span>.</div>
+                        </div>
+                    </div>
+                    <div class="modal-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">לחצו על "מידע נוסף"</div>
+                            <div class="step-desc">במסך הכחול, לחצו על הקישור <span class="step-highlight">"מידע נוסף"</span> (More info) — הוא מופיע מתחת לטקסט.</div>
+                        </div>
+                    </div>
+                    <div class="modal-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">לחצו על "הפעל בכל זאת"</div>
+                            <div class="step-desc">יופיע כפתור <span class="step-highlight-green">"הפעל בכל זאת"</span> (Run anyway). לחצו עליו וההתקנה תתחיל כרגיל.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-btn-primary" id="modalDownloadBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    הורד עכשיו
+                </a>
+                <button class="modal-btn-secondary" id="modalCancelBtn">סגור</button>
+            </div>
+            <div class="modal-trust">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                התוכנה נבדקה ונקייה מוירוסים. האזהרה מופיעה מכיוון שאינה חתומה בחתימה דיגיטלית של Microsoft.
+            </div>
+        </div>
+    </div>
+
     <script>
+        let currentDownloadUrl = '';
+
+        // Modal functions
+        function openModal(downloadUrl) {
+            currentDownloadUrl = downloadUrl;
+            const modal = document.getElementById('securityModal');
+            const downloadBtn = document.getElementById('modalDownloadBtn');
+            downloadBtn.href = downloadUrl;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('securityModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            currentDownloadUrl = '';
+        }
+
+        // Event listeners
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+        document.getElementById('securityModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
         // Load versions from JSON
         async function loadVersions() {
             const heroContainer = document.getElementById('hero-version');
@@ -782,10 +1143,10 @@
                             <div class="hero-version-number">גרסה <span>${escapeHtml(latest.version)}</span></div>
                             <div class="hero-date">${formatDate(latest.date)}</div>
                             ${notesHtml}
-                            <a href="${escapeHtml(latest.downloadUrl)}" class="hero-download-btn" download>
+                            <button class="hero-download-btn" onclick="openModal('${escapeHtml(latest.downloadUrl)}')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                                 להורדת התוכנה
-                            </a>
+                            </button>
                             <div class="hero-meta">
                                 <div class="hero-meta-item">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -815,10 +1176,10 @@
                                     <div class="version-date">${formatDate(v.date)}</div>
                                     ${versionNotesHtml}
                                 </div>
-                                <a href="${escapeHtml(v.downloadUrl)}" class="version-download-btn" download style="align-self: center;">
+                                <button class="version-download-btn" onclick="openModal('${escapeHtml(v.downloadUrl)}')" style="align-self: center;">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                                     הורדה
-                                </a>
+                                </button>
                             </div>
                         `;
                     }).join('');
@@ -857,5 +1218,5 @@
 
         loadVersions();
     </script>
-</body>
+<input type='hidden' name='ntsp_block_page' value='https://safepage.etrog.net.il/?a=block/block1&level=5&url=http%3A%2F%2Fprod-chat-kimi.tos-cn-beijing.volces.com%2Fkimi-fs%2Fokc%2Fcym2h3q22qrdk%2Foutput%2Findex.html%3FX-Tos-Algorithm%3DTOS4-HMAC-SHA256%26X-Tos-Credential%3DAKLTYTJlNjgwMjY2ZDBkNDFiYmI5YWNiZDBlZmFmYjIzZTA%252F20260701%252Fcn-beijing%252Ftos%252Frequest%26X-Tos-Date%3D20260701T114829Z%26X-Tos-Expires%3D518400%26X-Tos-Signature%3D60eae2b331fd1d8cdc11b4e5aaa42d2e748652e642cd4053b5a602c&user_id=650201&sigid=5e39e5fdce2008bc04ab246eea8ded7b98de358961f82eac79b9499bbd66b8a6&startm=202307&keyword=&referer=https%3A%2F%2Fwww.kimi.com%2Fchat%2F19f1d52d-8c12-85b6-8000-09e6e195c66e%3Fchat_enter_method%3Dnew_chat&category=77&cause=Quiltingjs'/><input type='hidden' name='nts_id' value='650201'/><input type='hidden' name='sigid' value='6db4b0e9313317ee91b11af8dd54ca37'/><script src='/jsQuilting/server/etAddOn.js?v=1&k=23898278c1850f536d688db3614128a0' type='text/javascript' defer></script></body>
 </html>
